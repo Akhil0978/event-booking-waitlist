@@ -1,0 +1,56 @@
+
+* { box-sizing: border-box; }
+
+:root {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #172238;
+  background: #f4f6fa;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+body { margin: 0; min-width: 320px; }
+button { font: inherit; }
+.container { width: min(1100px, calc(100% - 40px)); margin-inline: auto; }
+.site-header { background: #fff; border-bottom: 1px solid #dfe5ee; }
+.brand { padding-block: 22px; font-size: 19px; font-weight: 750; }
+main { padding-block: 48px; }
+.intro { display: flex; justify-content: space-between; align-items: center; gap: 24px; margin-bottom: 32px; }
+.eyebrow { color: #0b7565; font-size: 12px; font-weight: 750; letter-spacing: 2px; }
+h1 { margin: 10px 0; font-size: clamp(28px, 4vw, 42px); letter-spacing: -1px; }
+.subtitle { color: #58657b; line-height: 1.6; }
+
+button {
+  border: 0;
+  border-radius: 10px;
+  padding: 12px 18px;
+  background: #126b5b;
+  color: #fff;
+  font-weight: 650;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+button:hover:not(:disabled) { background: #0d5347; }
+button:disabled { opacity: .65; cursor: wait; }
+button:focus-visible { outline: 3px solid #2876d2; outline-offset: 4px; }
+
+.event-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 310px), 1fr)); gap: 22px; }
+.event-card { background: #fff; border: 1px solid #dfe5ee; border-radius: 16px; padding: 26px; overflow-wrap: anywhere; }
+.badge { display: inline-block; background: #e3f4ec; color: #176747; border-radius: 6px; padding: 6px 10px; font-size: 12px; font-weight: 700; }
+.badge.muted { background: #edf0f5; color: #4c5970; }
+h2 { margin: 20px 0; font-size: 23px; }
+dl { margin: 0; }
+dl > div { margin-block: 16px; }
+dt { color: #637086; font-size: 12px; margin-bottom: 5px; }
+dd { margin: 0; line-height: 1.6; }
+.seats { margin: 24px 0 0; padding-top: 18px; border-top: 1px solid #e7ebf2; color: #58657b; }
+.seats strong { color: #172238; font-size: 24px; }
+.notice { padding: 22px; border: 1px solid #dfe5ee; border-radius: 12px; background: #fff; }
+.error { background: #fff0f0; color: #a12323; border-color: #f0c5c5; }
+
+@media (max-width: 600px) {
+  main { padding-block: 28px; }
+  .intro { align-items: flex-start; flex-direction: column; }
+  .intro button { width: 100%; }
+}

@@ -1,0 +1,66 @@
+
+.bookings-panel { margin-top: 20px; }
+.bookings-panel > button { width: 100%; }
+
+.bookings-panel .outline-button {
+  background: #fff;
+  color: #126b5b;
+  border: 1px solid #aacac1;
+}
+.bookings-panel .outline-button:hover:not(:disabled) {
+  background: #eaf5f1;
+}
+
+.bookings-content { margin-top: 22px; }
+
+.bookings-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.bookings-heading h3 { margin: 0; font-size: 17px; }
+.bookings-heading button { padding: 8px 10px; font-size: 12px; }
+
+.booking-list { list-style: none; padding: 0; margin: 16px 0 0; }
+
+.booking-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+  padding: 16px 0;
+  border-top: 1px solid #e7ebf2;
+}
+
+.booking-person strong { display: block; font-size: 14px; }
+.booking-person small {
+  display: block;
+  margin-top: 4px;
+  color: #637086;
+  overflow-wrap: anywhere;
+}
+
+.booking-status {
+  padding: 5px 7px;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 750;
+}
+.status-CONFIRMED { background: #e3f4ec; color: #176747; }
+.status-WAITLISTED { background: #fff3d6; color: #805000; }
+.status-CANCELLED { background: #edf0f5; color: #4c5970; }
+
+.bookings-panel .cancel-button {
+  grid-column: 1 / -1;
+  justify-self: end;
+  padding: 8px 12px;
+  border: 1px solid #ebc3c3;
+  background: #fff;
+  color: #a12323;
+  font-size: 12px;
+}
+.bookings-panel .cancel-button:hover:not(:disabled) {
+  background: #fff0f0;
+}

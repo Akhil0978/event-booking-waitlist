@@ -1,0 +1,25 @@
+
+node_modules/
+dist/
+coverage/
+.env
+.env.*
+!.env.example
+backup*/
+*.zip
+*.log
+.DS_Store
+
+# Event Booking: local configuration and generated files
+node_modules/
+dist/
+coverage/
+.env
+.env.*
+!.env.example
+backup*/
+*.bak
+*.backup
+*.zip
+*.log
+.DS_Store
