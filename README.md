@@ -1,5 +1,7 @@
 # Event Booking & Waitlist
 
+**Live demo:** [Open the app](https://event-booking-waitlist.onrender.com)
+
 A full-stack application for reserving event seats, joining a waitlist, and automatically allocating a released seat to the next person in line.
 
 Built with React, Vite, Express and MongoDB by Akhil Choudhary.
@@ -145,7 +147,7 @@ Log in with that account and reload the page to see **Create an event** and **Vi
 
 The repository includes a Render configuration in `render.yaml`. In production, Express serves the built React app and the API at the same origin. Hosting uses the assigned `PORT`, a configured reverse-proxy hop count, and Secure session cookies.
 
-Follow [the deployment instructions](docs/DEPLOYMENT.md) to connect the repository, configure MongoDB access and verify the live app. No deployment URL or successful live-hosting test is claimed yet.
+Follow [the deployment instructions](docs/DEPLOYMENT.md) to connect the repository, configure MongoDB access and verify the live app. The live demo is hosted on Render.
 
 ## API
 
@@ -209,7 +211,7 @@ Live database concurrency/load tests and automated browser integration tests are
 
 ## Current scope
 
-The project supports local development and includes a configuration for a single Render web service. Cancelled bookings remain in the history, and the unique event/email index currently prevents rebooking the same event with the same email. Legacy bookings without a user ID are visible to admins only.
+The project runs locally and is deployed as a single Render web service. Cancelled bookings remain in the history, and the unique event/email index currently prevents rebooking the same event with the same email. Legacy bookings without a user ID are visible to admins only.
 
-Email verification, password reset, event editing/deletion, pagination and live seat updates are not implemented. The rate limiter is process-local. The hosting configuration still needs verification on the live service; there are no published throughput or scale claims.
+Email verification, password reset, event editing/deletion, pagination and live seat updates are not implemented. The rate limiter is process-local. There are no published throughput or scale claims.
 
