@@ -24,11 +24,23 @@ const defaultOrigins = [
   "http://127.0.0.1:3001",
 ];
 
+const configuredOrigins = process.env.APP_ORIGINS?.trim() || (
+  process.env.RENDER === "true" ? process.env.RENDER_EXTERNAL_URL?.trim() : ""
+);
+
 const allowedOrigins = new Set(
-  (process.env.APP_ORIGINS || defaultOrigins.join(","))
+  (configuredOrigins || (process.env.NODE_ENV === "production" ? "" : defaultOrigins.join(",")))
     .split(",")
     .map((value) => value.trim())
     .filter(Boolean)
+    .map((value) => {
+      const url = new URL(value);
+      if (!(["http:", "https:"].includes(url.protocol)) || url.username || url.password ||
+          url.pathname !== "/" || url.search || url.hash) {
+        throw new Error("APP_ORIGINS must contain only HTTP(S) origins, without paths or credentials");
+      }
+      return url.origin;
+    })
 );
 
 let dummyHash;
@@ -68,9 +80,13 @@ export async function createAuthSession(client) {
 
   if (
     process.env.NODE_ENV === "production" &&
-    !process.env.APP_ORIGINS
+    !allowedOrigins.size
   ) {
-    throw new Error("Set APP_ORIGINS before running in production");
+    throw new Error("Set APP_ORIGINS before running in production (Render can supply RENDER_EXTERNAL_URL)");
+  }
+  if (process.env.NODE_ENV === "production" &&
+      [...allowedOrigins].some((origin) => !origin.startsWith("https://"))) {
+    throw new Error("Production APP_ORIGINS must use HTTPS");
   }
 
   await User.init();

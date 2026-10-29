@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: event-booking-waitlist
+    runtime: node
+    plan: free
+    branch: main
+    autoDeployTrigger: "off"
+    buildCommand: npm ci --prefix server && npm ci --prefix client --include=dev && node checks/access-check.mjs && node checks/hosting-check.mjs && npm --prefix client run build
+    startCommand: npm --prefix server start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 24.22.1
+      - key: NODE_ENV
+        value: production
+      - key: TRUST_PROXY_HOPS
+        value: "1"
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: MONGODB_URI
+        sync: false

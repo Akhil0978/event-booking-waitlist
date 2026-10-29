@@ -141,6 +141,12 @@ ADMIN_SETUP
 
 Log in with that account and reload the page to see **Create an event** and **View all bookings**. No public API accepts a role during signup.
 
+## Deployment
+
+The repository includes a Render configuration in `render.yaml`. In production, Express serves the built React app and the API at the same origin. Hosting uses the assigned `PORT`, a configured reverse-proxy hop count, and Secure session cookies.
+
+Follow [the deployment instructions](docs/DEPLOYMENT.md) to connect the repository, configure MongoDB access and verify the live app. No deployment URL or successful live-hosting test is claimed yet.
+
 ## API
 
 Authentication uses the session cookie. POST requests from the frontend send `X-Requested-With: EventBooking`; requests with bodies use `Content-Type: application/json`.
@@ -166,11 +172,14 @@ From the repository root:
 
 ```bash
 node checks/access-check.mjs
+node checks/hosting-check.mjs
 npm --prefix client run lint -- src vite.config.js
 npm --prefix client run build
 ```
 
 The access check executes the actual route handlers and auth guards with in-memory model doubles. It covers anonymous access, admin restrictions, forged booking identity, ownership-scoped lists, cross-user cancellation, legacy records, promotion privacy, duplicate bookings, repeated cancellation and failure/rollback paths. It does not connect to MongoDB or start an HTTP server.
+
+The hosting check starts local HTTP servers using the actual Express middleware and authentication handlers. Users and session storage are held in memory. It checks production static files, JSON API 404s, origin checks, proxy-aware Secure cookies, signup/login/logout and local-development cookies. It does not connect to live MongoDB or Render.
 
 Local manual checks also covered:
 
@@ -190,13 +199,17 @@ Live database concurrency/load tests and automated browser integration tests are
 | `client/vite.config.js` | Local API proxy |
 | `server/index.js` | Event and booking API; transactions |
 | `server/auth.js` | Sessions, authentication and access guards |
+| `server/hosting.js` | Port, proxy and production static-file configuration |
 | `server/models/` | User, Event and Booking schemas |
 | `server/.env.example` | Configuration template without credentials |
 | `checks/access-check.mjs` | Handler and authorization checks |
+| `checks/hosting-check.mjs` | HTTP and hosting configuration checks with in-memory storage |
+| `render.yaml` | Single-service Render deployment configuration |
+| `docs/DEPLOYMENT.md` | Deployment and live verification steps |
 
 ## Current scope
 
-This is a local development project. Cancelled bookings remain in the history, and the unique event/email index currently prevents rebooking the same event with the same email. Legacy bookings without a user ID are visible to admins only.
+The project supports local development and includes a configuration for a single Render web service. Cancelled bookings remain in the history, and the unique event/email index currently prevents rebooking the same event with the same email. Legacy bookings without a user ID are visible to admins only.
 
-Email verification, password reset, event editing/deletion, pagination and live seat updates are not implemented. The rate limiter is process-local. Production deployment still needs HTTPS, the appropriate proxy/cookie configuration and frontend API routing; there are no published throughput or scale claims.
+Email verification, password reset, event editing/deletion, pagination and live seat updates are not implemented. The rate limiter is process-local. The hosting configuration still needs verification on the live service; there are no published throughput or scale claims.
 

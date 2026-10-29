@@ -4,19 +4,19 @@ import mongoose from "mongoose";
 import { setServers } from "node:dns/promises";
 import Event from "./models/Event.js";
 import Booking from "./models/Booking.js";
+import { configureHosting } from "./hosting.js";
 import {
   authRouter, createAuthSession, loadCurrentUser,
   requireLogin, requireAdmin, requireTrustedRequest,
 } from "./auth.js";
 
 const app = express();
-const PORT = 3001;
 
-app.use(express.json());
+app.use("/api", express.json());
 
 let authSessionMiddleware;
-app.use((req, res, next) => authSessionMiddleware(req, res, next));
-app.use(loadCurrentUser);
+app.use("/api", (req, res, next) => authSessionMiddleware(req, res, next));
+app.use("/api", loadCurrentUser);
 app.use("/api/auth", authRouter);
 
 function apiError(status, message) {
@@ -292,7 +292,7 @@ app.post("/api/events/:eventId/bookings/:bookingId/cancel", requireLogin, requir
   }
 });
 
-app.use((error, req, res, next) => {
+function handleError(error, req, res, next) {
   if (error.code === 11000) {
     return res.status(409).json({
       success: false,
@@ -312,10 +312,13 @@ app.use((error, req, res, next) => {
     success: false,
     message: status >= 500 ? "Something went wrong" : error.message,
   });
-});
+}
 
 async function startServer() {
   try {
+    const PORT = configureHosting(app, express);
+    app.use(handleError);
+
     if (!process.env.MONGODB_URI) {
       throw new Error("MONGODB_URI missing in server/.env");
     }
@@ -341,7 +344,7 @@ async function startServer() {
     console.log("MongoDB connected");
     console.log("Booking indexes ready");
 
-    app.listen(PORT, () => {
+    app.listen(PORT, "0.0.0.0", () => {
       console.log("Server running at http://localhost:" + PORT);
       console.log("Routes ready: events + bookings");
     });
